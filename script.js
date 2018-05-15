@@ -2,15 +2,20 @@ const fs = require('fs');
 const dictionary = fs.readFileSync('/usr/share/dict/words').toString().trim().split('\n')
 
 
-scrabbleWords = (letters) => {
-  let arrayOfWords = findWords(letters)
+scrabbleWords = (letters, char, position) => {
+  letters = letters+char
+  let arrayOfWords = findWords(letters, char, position)
+
+  if(!arrayOfWords.length){
+    return "Sorry, there are no words that fit your criteria"
+  }
 
   return sortWords(arrayOfWords)
 }
 
-findWords = (letters) => {
+findWords = (letters, char, position) => {
   let wordArray = dictionary.reduce((acc, word) => {
-    if(checkLetters(letters, word)){
+    if(checkLetters(letters, word) && word.includes(char, position)){
       acc.push({word: word, score: calculateScore(word)})
     }
     return acc
@@ -49,4 +54,4 @@ sortWords=(array)=>{
 
 
 
-console.log(scrabbleWords('god'))
+console.log(scrabbleWords('god', 'c', 2))
